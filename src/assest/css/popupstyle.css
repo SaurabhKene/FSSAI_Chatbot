@@ -1,0 +1,250 @@
+/* chatPopupStyles.css */
+
+.buttonsContainer {
+    flex-wrap: wrap;
+  }
+  
+  .popupContainer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 999;
+  }
+  
+  .buttonContainer {
+    display: flex;
+    justify-content: space-around;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .optionButton {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    background-color: #ff5e04;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  
+  .welcomeMessage {
+    margin-top: 10px;
+    font-size: 14px;
+    line-height: 1.5;
+    text-align: justify;
+  }
+  
+  .popupHeader {
+    padding: 10px;
+    background-color: #ff5e04;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .greeting {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: white;
+  }
+  
+  .description {
+    font-size: 13px;
+    line-height: 1.4;
+    margin-bottom: 4px;
+    margin: 2px;
+    color: white;
+  }
+  
+  .closeButton {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: transparent;
+    border: none;
+    color: #ffffff;
+    font-size: 10px;
+    cursor: pointer;
+    padding: 0;
+  }
+  
+  .chatBox {
+    flex: 1;
+    overflow-y: auto;
+    background-image: 
+      linear-gradient(rgba(255, 255, 255, 0.63), rgba(255, 255, 255, 0.8)),
+      url(../Images/fssai.png); 
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    scrollbar-width: none;
+  }
+  .messageContainer {
+    display: flex;
+    align-items: flex-start;
+    margin: 05px 05px;
+  }
+  
+  .myMessageContainer {
+    flex-direction: row-reverse;
+  }
+  
+  .theirMessageContainer {
+    flex-direction: row;
+  }
+  
+  .avatar {
+    width: 40px;
+    height: 50px;
+    border-radius: 50%;
+    margin: 0 5px;
+  }
+  
+  .message {
+    padding: 5px 10px;
+    border-radius: 10px;
+    max-width: 80%;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    position: relative;
+  }
+  
+  .myMessage {
+    background-color: #bbf8c2;
+    text-align: left;
+  }
+  
+  .theirMessage {
+    background-color: #dddddd;
+    text-align: left;
+  }
+  
+  .text {
+    font-size: 0.9em;
+    color: #000;
+  }
+  
+  .time {
+    font-size: 0.6em;
+    color: #777;
+    text-align: right;
+  }
+  
+  .inputContainer {
+    display: flex;
+    padding: 3px;
+    border-top: 1px solid #ccc;
+  }
+  
+  .input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .buttonSend {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    background-color: #ff5e04;
+    color: white;
+    cursor: pointer;
+  }
+  
+  .button {
+    padding: 8px 14px;
+    background-color: white;
+    border: 2px solid #ff5e04;
+    color: black;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 11px;
+    transition: background-color 0.3s, color 0.3s;
+    white-space: nowrap;
+    max-width: auto;
+    word-wrap: break-word;
+    margin-bottom: 10px;
+    margin: 5px;
+  }
+  
+  .button:hover {
+    background-color: #ff5e04;
+    color: white;
+  }
+ 
+  .inputWrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .customInput {
+    flex: 1;
+    padding: 7px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 300px;
+  }
+  
+  .buttonsContainer {
+    margin-top: 0px;
+  }
+  .loader {
+    font-size: 0.9rem;
+    color: #7a7a7a;
+    margin-left: 5px;
+    font-style: italic;
+  }
+  .chatbot-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  .dot {
+    width: 8px;
+    height: 8px;
+    background-color: #888b88;
+    border-radius: 50%;
+    animation: jump 0.9s infinite ease-in-out;
+  }
+  .dot:nth-child(1) {
+    animation-delay: 0.1s;
+  }
+  
+  .dot:nth-child(2) {
+    animation-delay: 0.3s;
+  }
+  
+  .dot:nth-child(3) {
+    animation-delay: 0.5s;
+  }
+  
+  @keyframes jump {
+    0%, 80%, 100% {
+      transform: translateY(0);
+    }
+    40% {
+      transform: translateY(-10px);
+    }
+  }
+  
+ 
+  
+
+  
