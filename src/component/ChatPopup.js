@@ -101,7 +101,7 @@ function ChatPopup({ isOpen, onClose }) {
     hours = hours % 12;
     hours = hours ? hours : 12; // the hour '0' should be '12'
     const minutesFormatted = minutes < 10 ? `0${minutes}` : minutes;
-    // const secondsFormatted = seconds < 10 ? `0${seconds}` : seconds;
+    //const secondsFormatted = seconds < 10 ? `0${seconds}` : seconds;
     return `${hours}:${minutesFormatted} ${period}`;
   };
 
