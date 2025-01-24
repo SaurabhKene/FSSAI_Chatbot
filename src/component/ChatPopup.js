@@ -54,7 +54,6 @@ function ChatPopup({ isOpen, onClose }) {
       console.error("API call error:", error);
     }
   };
-
   const createThread = async () => {
     try {
       const headers = {
@@ -62,14 +61,14 @@ function ChatPopup({ isOpen, onClose }) {
         "Content-Type": "application/json",
         "OpenAI-Beta": "assistants=v2",
       };
-      const body = JSON.stringify({
-        model: "gpt-4o-mini", // or any other model from the list
-      });
+      const body = JSON.stringify({});
+
       const response = await fetch("https://api.openai.com/v1/threads", {
         method: "POST",
         headers: headers,
         body: body,
       });
+
       if (!response.ok) {
         const errorData = await response.json();
         console.error("Error response from API:", errorData);
@@ -79,7 +78,7 @@ function ChatPopup({ isOpen, onClose }) {
       const data = await response.json();
 
       if (data && data.id) {
-        setThreadId(data.id);
+        setThreadId(data.id); // Assuming setThreadId is properly set up
       } else {
         console.error("Thread ID not returned from API.");
       }
@@ -92,32 +91,79 @@ function ChatPopup({ isOpen, onClose }) {
     createThread();
   }, [clientData.bearerToken]);
 
+  console.log(threadId);
   const getCurrentTime = () => {
     const date = new Date();
     let hours = date.getHours();
     const minutes = date.getMinutes();
-    //const seconds = date.getSeconds();
+    // const seconds = date.getSeconds();
     const period = hours >= 12 ? "pm" : "am";
     hours = hours % 12;
     hours = hours ? hours : 12; // the hour '0' should be '12'
     const minutesFormatted = minutes < 10 ? `0${minutes}` : minutes;
-    //const secondsFormatted = seconds < 10 ? `0${seconds}` : seconds;
+    // const secondsFormatted = seconds < 10 ? `0${seconds}` : seconds;
     return `${hours}:${minutesFormatted} ${period}`;
   };
 
+  // const handleButtonClic = (type) => {
+  //   if (type === "trackApplication") {
+  //     // Fetch the options each time the button is clicked
+  //     fetch(
+  //       `http://qms.digital.logicsoft.online:8081/gateway/chatbot/bot/getModulesByClientId/${modelString}`
+  //     )
+  //       .then((response) => response.json())
+  //       .then((data) => {
+  //         setModules(data); // Update the modules state with the fetched data
+  //       })
+  //       .catch((error) => {
+  //         console.error("Error fetching modules:", error);
+  //       });
+  //   }
+  // };
   const handleButtonClic = (type) => {
     if (type === "trackApplication") {
-      // Fetch the options each time the button is clicked
+      setMessages((prev) => [
+        ...prev,
+        {
+          text: "Track Application/Complaint",
+          sender: "You",
+          time: getCurrentTime(),
+        },
+      ]);
       fetch(
         `http://qms.digital.logicsoft.online:8081/gateway/chatbot/bot/getModulesByClientId/${modelString}`
       )
         .then((response) => response.json())
         .then((data) => {
-          setModules(data); // Update the modules state with the fetched data
+          setModules(data); // Update the modules state
+          // Append fetched buttons as a new message to the messages array
+          setMessages((prevMessages) => [
+            ...prevMessages,
+            {
+              sender: "Bot",
+              text: "Select an option:",
+              buttons: data.map((module) => ({
+                id: module.moduleId,
+                name: module.clientName,
+                action: () => handleTAClick(module.clientBotName),
+              })),
+            },
+          ]);
+          // Scroll to the bottom
+          //scrollToBottom();
         })
         .catch((error) => {
           console.error("Error fetching modules:", error);
         });
+    } else if (type === "generalQuery") {
+      setMessages((prev) => [
+        ...prev,
+        {
+          text: "Please enter your query in the text box below.",
+          sender: "Bot",
+          time: getCurrentTime(),
+        },
+      ]);
     }
   };
   useEffect(() => {
@@ -275,7 +321,7 @@ function ChatPopup({ isOpen, onClose }) {
           style: { color: "red", fontSize: "20px" },
         },
       ]);
-      return; // Terminate the function
+      return;
     }
 
     const baseApiUrl = `https://api.openai.com/v1/threads/${threadId}`;
@@ -307,7 +353,6 @@ function ChatPopup({ isOpen, onClose }) {
     setIsLoading(true);
 
     try {
-      // Send user message to the API
       const messageSettings = {
         method: "POST",
         headers: {
@@ -316,7 +361,6 @@ function ChatPopup({ isOpen, onClose }) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          model: "gpt-4o-mini",
           role: "user",
           content: [{ type: "text", text: userMessage }],
         }),
@@ -377,6 +421,7 @@ function ChatPopup({ isOpen, onClose }) {
                       const currentText = String(lastMessage.text || ""); // Ensure text is a string
                       if (!currentText.endsWith(token)) {
                         console.log(getCurrentTime());
+                        console.log(token);
                         lastMessage.text = currentText + token;
                       }
                       updatedMessages.push(lastMessage);
@@ -452,25 +497,6 @@ function ChatPopup({ isOpen, onClose }) {
               )}
             </div>
           </div>
-          {modules.length > 0 && (
-            <div className="messageContainer theirMessageContainer">
-              <img src={botImg} alt="Bot Avatar" className="avatar" />
-              <div className="message theirMessage">
-                <span className="text">Select an option:</span>
-                <div className="buttonsContainer">
-                  {modules.map((module, index) => (
-                    <button
-                      key={module.moduleId}
-                      className="button"
-                      onClick={() => handleTAClick(module.clientBotName)}
-                    >
-                      {module.clientName}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
           {messages.map((message, index) => {
             // Check if `message` is a JSX element
             if (React.isValidElement(message)) {
@@ -494,16 +520,35 @@ function ChatPopup({ isOpen, onClose }) {
                     message.sender === "You" ? "myMessage" : "theirMessage"
                   }`}
                 >
+                  {/* Render message text */}
                   {Array.isArray(message.text)
                     ? message.text.map((item, idx) => (
                         <span key={idx}>{item}</span>
                       ))
                     : message.text}
+
+                  {/* Render buttons if they exist */}
+                  {message.buttons && (
+                    <div className="buttonsContainer">
+                      {message.buttons.map((button) => (
+                        <button
+                          key={button.id}
+                          className="button"
+                          onClick={button.action}
+                        >
+                          {button.name}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Render timestamp */}
                   <div className="time">{message.time}</div>
                 </div>
               </div>
             );
           })}
+
           {isLoading && (
             <div className="messageContainer theirMessageContainer">
               <div className="chatbot-loading">
